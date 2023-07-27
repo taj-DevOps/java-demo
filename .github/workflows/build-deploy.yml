@@ -21,3 +21,37 @@ jobs:
           sudo cp target/*.war /opt/tomcat/webapps/  # Replace your_app.war with your war file name
           sudo systemctl restart tomcat
 
+      - name: Get the latest release tag
+        id: get_latest_tag
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const { data: releases } = await github.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 1
+            });
+            console.log(releases[0].tag_name);
+            core.setOutput("latest_tag", releases[0].tag_name);
+
+      - name: Increment tag
+        id: increment_tag
+        run: |
+          latest_tag=${{ steps.get_latest_tag.outputs.latest_tag }}
+          IFS='.' read -r major minor patch <<< "$latest_tag"
+          next_tag="v$major.$minor.$((patch + 1))"
+          echo "::set-output name=next_tag::$next_tag"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        with:
+          tag_name: ${{ steps.increment_tag.outputs.next_tag }}
+          release_name: Release ${{ steps.increment_tag.outputs.next_tag }}
+          body: |
+            Add release notes here # Replace with the release notes for the new version
+          draft: false
+          prerelease: false
+
