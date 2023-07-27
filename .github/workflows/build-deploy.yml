@@ -13,12 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'  # Replace with your desired Java version
-          distribution: 'jdk'  # Specify the distribution for custom package (e.g., jdk)
-
       - name: Build with Maven
         run: mvn clean package  # Replace with your build command (e.g., gradle build)
 
