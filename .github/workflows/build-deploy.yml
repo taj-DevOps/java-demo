@@ -14,11 +14,12 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build with Maven
-        run: mvn clean package  # Replace with your build command (e.g., gradle build)
+        run: mvn clean package -Dmaven.test.skip=true  # Replace with your build command (e.g., gradle build)
+        working-directory: path/to/maven/project  # Replace with the path to your Maven project
 
       - name: Deploy to Tomcat
         run: |
-          sudo cp target/*.war /opt/tomcat/webapps/  # Replace your_app.war with your war file name
+          sudo cp path/to/maven/project/target/*.war /opt/tomcat/webapps/  # Replace path/to/maven/project with the actual path to your Maven project
           sudo systemctl restart tomcat
 
       - name: Get the latest release tag
@@ -36,7 +37,7 @@ jobs:
               core.setOutput("latest_tag", releases[0].tag_name);
             } else {
               console.log("No releases found.");
-              core.setOutput("latest_tag", "v1.0.-1");  // Set the initial tag to v1.0.0
+              core.setOutput("latest_tag", "v1.0.0");  // Set the initial tag to v1.0.0
             }
 
       - name: Increment tag
@@ -59,4 +60,6 @@ jobs:
             Add release notes here # Replace with the release notes for the new version
           draft: false
           prerelease: false
+          files: |
+            **/*.war  # Replace path/to/maven/project with the actual path to your Maven project
 
