@@ -10,19 +10,20 @@ jobs:
     runs-on: runner-1  # Use the label of your self-hosted runner
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        java-version: '11'  # Replace with your desired Java version
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # Replace with your desired Java version
+          distribution: 'jdk'  # Specify the distribution for custom package (e.g., jdk)
 
-    - name: Build with Maven
-      run: mvn clean package  # Replace with your build command (e.g., gradle build)
+      - name: Build with Maven
+        run: mvn clean package  # Replace with your build command (e.g., gradle build)
 
-    - name: Deploy to Tomcat
-      run: |
-        sudo cp target/*.war /opt/tomcat/webapps/  # Replace your_app.war with your war file name
-        sudo systemctl restart tomcat
+      - name: Deploy to Tomcat
+        run: |
+          sudo cp target/*.war /opt/tomcat/webapps/  # Replace your_app.war with your war file name
+          sudo systemctl restart tomcat
 
