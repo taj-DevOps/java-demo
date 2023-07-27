@@ -15,11 +15,11 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean package -Dmaven.test.skip=true  # Replace with your build command (e.g., gradle build)
-        working-directory: path/to/maven/project  # Replace with the path to your Maven project
+          #working-directory: path/to/maven/project  # Replace with the path to your Maven project
 
       - name: Deploy to Tomcat
         run: |
-          sudo cp path/to/maven/project/target/*.war /opt/tomcat/webapps/  # Replace path/to/maven/project with the actual path to your Maven project
+          sudo cp **/*.war /opt/tomcat/webapps/  # Replace path/to/maven/project with the actual path to your Maven project
           sudo systemctl restart tomcat
 
       - name: Get the latest release tag
