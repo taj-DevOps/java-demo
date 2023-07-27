@@ -1,0 +1,28 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - feature/taj  # Replace with your main branch name
+
+jobs:
+  build-and-deploy:
+    runs-on: runner-1  # Use the label of your self-hosted runner
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'  # Replace with your desired Java version
+
+    - name: Build with Maven
+      run: mvn clean package  # Replace with your build command (e.g., gradle build)
+
+    - name: Deploy to Tomcat
+      run: |
+        sudo cp target/*.war /opt/tomcat/webapps/  # Replace your_app.war with your war file name
+        sudo systemctl restart tomcat
+
